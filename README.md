@@ -1,7 +1,7 @@
 # proyecto final analisis numerico
  
 
-## Usage Instructions
+## instrucciones de uso
 para utilizarlo asegurese de tener instalado lo siguiente: 
 
 * **Python**
