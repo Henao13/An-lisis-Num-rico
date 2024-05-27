@@ -11,7 +11,7 @@ siga los siguientes pasos:
 
 ### 1. clone el proyecto desde github:
 ```bash
-git clone https://github.com/Henao13/QTAProject.git
+git clone https://github.com/Henao13/Analisis-Numerico.git
 ```
 ### 2. navegue hasta el directorio donde guardo el proyecto: 
 ```bash
