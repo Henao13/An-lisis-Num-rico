@@ -1,0 +1,1019 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <title>Análisis Numérico</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-aFq/bzH65dt+w6FI2ooMVUpc+21e0SRygnTpmBvdBgSdnuTN7QbdgL+OapgHtvPp" crossorigin="anonymous">
+        <style>
+            html, body {
+                margin: 0;
+                padding: 0;
+                height: 100%;
+                width: 100%;
+                font-family: Arial, sans-serif;
+            }
+            table {
+                width: 100%;
+                border-collapse: collapse;
+            }
+            th, td {
+                padding: 8px 12px;
+                border: 1px solid #ccc;
+            }
+            th {
+                background-color: #f4f4f4;
+            }
+            body {
+                display: flex;
+                margin: 0;
+                padding: 0;
+            }
+            #t1 {
+                text-align: center;  
+                text-decoration: underline;  
+                font-weight: bold; 
+                font-size:40px
+            }
+            #t2 {
+                text-align: center;                 
+                
+                font-size:25px
+            }
+           
+            
+            .header{
+                                
+                background-color: #ccc; /* Color gris */
+                padding: 20px;
+                box-sizing: border-box;
+                width: 380px;
+                height: 100%;
+                position: fixed;
+            }
+            main {
+                 
+                padding: 50px;
+                box-sizing: border-box;
+                flex-grow: 1; /* Permite que main ocupe el espacio restante */
+                margin-left: 400px;
+                overflow-y: auto;
+                flex: 1;
+            }
+            #seleccion {
+                font-size:20px; /* Tamaño de letra más grande */
+                color: white; /* Color de texto blanco */
+                text-shadow: -1px -1px 0 black,  
+                  1px -1px 0 black,
+                 -1px 1px 0 black,
+                  1px 1px 0 black;
+                font-weight: bold;  
+            }
+            #test{
+                  
+                font-size:20px  
+                 
+            }
+             
+        </style>
+    </head>
+
+    <body >
+        <header class="header">
+            <h1 id="t1">proyecto analisis numerico</h1>  
+            <br>
+ 
+             
+         
+         
+         
+        <form method="post">
+            {% csrf_token %}
+            <label id="seleccion" for="metodo">Selecciona un método:</label>
+            <select id="metodo" name="metodo">
+                <option value="efecto">Selecciona un método</option> <!-- Opción vacía por defecto -->
+                <option value="incrementales">Incrementales</option>
+                <option value="biseccion">Bisección</option>
+                <option value="regla_falsa">Regla falsa</option>
+                <option value="punto_fijo">Punto fijo</option>
+                <option value="newton">Newton</option>
+                <option value="raices_multiples">Raíces múltiples</option>
+                <option value="secante">Secante</option>
+                <option value="eliminacion_gaussiana_sencilla">Eliminación gaussiana sencilla</option>
+                <option value="eliminacion_gaussiana_con_pivoteo">Eliminación gaussiana con pivoteo</option>
+                <option value="factorizacion_LU_con_eliminacion_gaussiana">Factorización LU con eliminación gaussiana</option>
+                <option value="crout">Crout</option>
+                <option value="cholesky">Cholesky</option>
+                <option value="doolittle">Doolittle</option>
+                <option value="gauss_seidel">Gauss-Seidel</option>
+                <option value="jacobi">Jacobi</option>
+            </select>
+            <br><br>
+            <input type="hidden" name="form_type" value="form_seleccionar">
+            <button type="submit">Seleccionar</button>
+        </form>
+
+        
+        <br>
+        <br>
+
+        
+
+    {% if metodo_seleccionado == "incrementales" %}
+        <p id="seleccion">Has seleccionado el método Incrementales.</p>
+        <form method="post">
+            {% csrf_token %}
+            <label for="f">f(x):</label>
+            <input type="text" id="f" name="f" required><br><br>
+        
+            <label for="x0">x inicial:</label>
+            <input type="text" id="x0" name="x0" required><br><br>
+        
+            <label for="h">delta:</label>
+            <input type="text" id="h" name="h" required><br><br>
+        
+            <label for="Nmax">Nmax:</label>
+            <input type="text" id="Nmax" name="Nmax" required><br><br>
+
+            <input type="hidden" name="form_type" value="form_solucionar_in">
+        
+            <button type="submit">Ejecutar</button>
+        </form>
+
+        
+
+    {% endif %}
+    {% if metodo_seleccionado == "biseccion"  %}
+        <p id="seleccion">Has seleccionado el método biseccion.</p>
+        <form method="post">
+            {% csrf_token %}
+            <label for="f">f(x):</label>
+            <input type="text" id="f" name="f" required><br><br>
+        
+            <label for="a">limite inferior:</label>
+            <input type="text" id="a" name="a" required><br><br>
+        
+            <label for="b">limite suberior:</label>
+            <input type="text" id="b" name="b" required><br><br>
+
+            <label for="tol">tolerancia:</label>
+            <input type="text" id="tol" name="tol" required><br><br>
+        
+            <label for="Nmax">Nmax:</label>
+            <input type="text" id="Nmax" name="Nmax" required><br><br>
+
+            <input type="hidden" name="form_type" value="form_solucionar_bi">
+        
+            <button type="submit">Ejecutar</button>
+        </form>
+         
+        
+    {% endif %}
+    {% if  metodo_seleccionado == "regla_falsa" %}
+        <p id="seleccion">Has seleccionado el método regla falsa.</p>
+        <form method="post">
+            {% csrf_token %}
+            <label for="f">f(x):</label>
+            <input type="text" id="f" name="f" required><br><br>
+        
+            <label for="a">limite inferior:</label>
+            <input type="text" id="a" name="a" required><br><br>
+        
+            <label for="b">limite suberior:</label>
+            <input type="text" id="b" name="b" required><br><br>
+
+            <label for="tol">tolerancia:</label>
+            <input type="text" id="tol" name="tol" required><br><br>
+        
+            <label for="Nmax">Nmax:</label>
+            <input type="text" id="Nmax" name="Nmax" required><br><br>
+
+            <input type="hidden" name="form_type" value="form_solucionar_re">
+        
+            <button type="submit">Ejecutar</button>
+        </form>
+         
+        
+    {% endif %}
+
+     
+
+    {% if metodo_seleccionado == "punto_fijo" %}
+        <p id="seleccion">Has seleccionado el método Punto Fijo.</p>
+        <form method="post">
+            {% csrf_token %}
+            <label for="g">g(x):</label>
+            <input type="text" id="g" name="g" required><br><br>
+        
+            <label for="x0">x(0):</label>
+            <input type="text" id="x0" name="x0" required><br><br>
+         
+            <label for="tol">tolerancia:</label>
+            <input type="text" id="tol" name="tol" required><br><br>
+        
+            <label for="Nmax">Nmax:</label>
+            <input type="text" id="Nmax" name="Nmax" required><br><br>
+
+            <input type="hidden" name="form_type" value="form_solucionar_pf">
+        
+            <button type="submit">Ejecutar</button>
+        </form>
+    {% endif %}
+
+    {% if metodo_seleccionado == "newton" %}
+        <p id="seleccion">Has seleccionado el método Newton.</p>
+        <form method="post">
+            {% csrf_token %}
+            <label for="f">f(x):</label>
+            <input type="text" id="f" name="f" required><br><br>
+        
+            <label for="df">df(x)</label>
+            <input type="text" id="df" name="df" required><br><br>
+        
+            <label for="x0">x(0)</label>
+            <input type="text" id="x0" name="x0" required><br><br>
+
+            <label for="tol">tolerancia:</label>
+            <input type="text" id="tol" name="tol" required><br><br>
+        
+            <label for="Nmax">Nmax:</label>
+            <input type="text" id="Nmax" name="Nmax" required><br><br>
+
+            <input type="hidden" name="form_type" value="form_solucionar_ne">
+        
+            <button type="submit">Ejecutar</button>
+        </form>
+    {% endif %}
+
+    {% if metodo_seleccionado == "raices_multiples" %}
+        <p id="seleccion">Has seleccionado el método Raíces Múltiples.</p>        
+        <form method="post">
+            {% csrf_token %}
+            <label for="f">f(x):</label>
+            <input type="text" id="f" name="f" required><br><br>
+        
+            <label for="df">df(x)</label>
+            <input type="text" id="df" name="df" required><br><br>
+        
+            <label for="d2f">d2f(x)</label>
+            <input type="text" id="d2f" name="d2f" required><br><br>
+
+            <label for="x0">x(0)</label>
+            <input type="text" id="x0" name="x0" required><br><br>
+
+            <label for="tol">tolerancia:</label>
+            <input type="text" id="tol" name="tol" required><br><br>
+        
+            <label for="Nmax">Nmax:</label>
+            <input type="text" id="Nmax" name="Nmax" required><br><br>
+
+            <input type="hidden" name="form_type" value="form_solucionar_rm">
+        
+            <button type="submit">Ejecutar</button>
+        </form>
+    {% endif %}
+
+    {% if metodo_seleccionado == "secante" %}
+        <p id="seleccion">Has seleccionado el método Secante.</p>
+        <form method="post">
+            {% csrf_token %}
+        <label for="f">f(x):</label>
+        <input type="text" id="f" name="f" required><br><br>
+              
+        <label for="x0">x(0)</label>
+        <input type="text" id="x0" name="x0" required><br><br>
+
+        <label for="x1">x(1)</label>
+        <input type="text" id="x1" name="x1" required><br><br>
+
+        <label for="tol">tolerancia:</label>
+        <input type="text" id="tol" name="tol" required><br><br>
+    
+        <label for="Nmax">Nmax:</label>
+        <input type="text" id="Nmax" name="Nmax" required><br><br>
+
+        <input type="hidden" name="form_type" value="form_solucionar_sec">
+    
+        <button type="submit">Ejecutar</button>
+    </form>
+    {% endif %}
+
+    {% if metodo_seleccionado == "eliminacion_gaussiana_sencilla" %}
+
+        <p id="seleccion">Has seleccionado el método {{metodo_seleccionado}}.</p>
+        <form method="post">
+            {% csrf_token %}
+        <label for="A">A:</label>
+        <input type="text" id="A" name="A" required><br><br>
+              
+        <label for="b">b</label>
+        <input type="text" id="b" name="b" required><br><br>
+
+        <input type="hidden" name="form_type" value="form_solucionar_gas">
+
+        <button type="submit">Ejecutar</button>
+    </form>
+    {% endif %}
+    {% if  metodo_seleccionado == "eliminacion_gaussiana_con_pivoteo" %}
+
+        <p id="seleccion">Has seleccionado el método {{metodo_seleccionado}}.</p>
+        <form method="post">
+            {% csrf_token %}
+        <label for="A">A:</label>
+        <input type="text" id="A" name="A" required><br><br>
+              
+        <label for="b">b</label>
+        <input type="text" id="b" name="b" required><br><br>
+
+        <input type="hidden" name="form_type" value="form_solucionar_gap">
+
+        <button type="submit">Ejecutar</button>
+    </form>
+    {% endif %}
+    {% if  metodo_seleccionado == "factorizacion_LU_con_eliminacion_gaussiana" %}
+
+        <p id="seleccion">Has seleccionado el método factorizacion LU.</p>
+        <form method="post">
+            {% csrf_token %}
+        <label for="A">A:</label>
+        <input type="text" id="A" name="A" required><br><br>
+              
+        <label for="b">b</label>
+        <input type="text" id="b" name="b" required><br><br>
+
+        <input type="hidden" name="form_type" value="form_solucionar_LU">
+
+        <button type="submit">Ejecutar</button>
+    </form>
+    {% endif %}
+    {% if metodo_seleccionado == "doolittle"%}
+
+        <p id="seleccion">Has seleccionado el método {{metodo_seleccionado}}.</p>
+        <form method="post">
+            {% csrf_token %}
+        <label for="A">A:</label>
+        <input type="text" id="A" name="A" required><br><br>
+              
+        <label for="b">b</label>
+        <input type="text" id="b" name="b" required><br><br>
+
+        <input type="hidden" name="form_type" value="form_solucionar_doo">
+
+        <button type="submit">Ejecutar</button>
+    </form>
+    {% endif %}
+    {% if   metodo_seleccionado == "crout" %}
+
+        <p id="seleccion">Has seleccionado el método crout.</p>
+        <form method="post">
+            {% csrf_token %}
+        <label for="A">A:</label>
+        <input type="text" id="A" name="A" required><br><br>
+              
+        <label for="b">b</label>
+        <input type="text" id="b" name="b" required><br><br>
+
+        <input type="hidden" name="form_type" value="form_solucionar_cro">
+
+        <button type="submit">Ejecutar</button>
+    </form>
+    {% endif %}
+    {% if  metodo_seleccionado == "cholesky" %}
+
+        <p id="seleccion">Has seleccionado el método {{metodo_seleccionado}}.</p>
+        <form method="post">
+            {% csrf_token %}
+        <label for="A">A:</label>
+        <input type="text" id="A" name="A" required><br><br>
+              
+        <label for="b">b</label>
+        <input type="text" id="b" name="b" required><br><br>
+
+        <input type="hidden" name="form_type" value="form_solucionar_cho">
+
+        <button type="submit">Ejecutar</button>
+    </form>
+    {% endif %}
+
+    
+
+    {% if metodo_seleccionado == "jacobi"%}
+        <p id="seleccion">Has seleccionado el método {{metodo_seleccionado}}.</p>
+        <form method="post">
+            {% csrf_token %}
+            <label for="A">A:</label>
+            <input type="text" id="A" name="A" required><br><br>
+        
+            <label for="b">b:</label>
+            <input type="text" id="b" name="b" required><br><br>
+        
+            <label for="x0">x(0):</label>
+            <input type="text" id="x0" name="x0" required><br><br>
+
+            <label for="tol">tolerancia:</label>
+            <input type="text" id="tol" name="tol" required><br><br>
+        
+            <label for="Nmax">Nmax:</label>
+            <input type="text" id="Nmax" name="Nmax" required><br><br>
+
+            <input type="hidden" name="form_type" value="form_solucionar_jac">
+        
+            <button type="submit">Ejecutar</button>
+        </form>
+    {% endif %}
+    {% if metodo_seleccionado == "gauss_seidel" %}
+        <p id="seleccion">Has seleccionado el método {{metodo_seleccionado}}.</p>
+        <form method="post">
+            {% csrf_token %}
+            <label for="A">A:</label>
+            <input type="text" id="A" name="A" required><br><br>
+        
+            <label for="b">b:</label>
+            <input type="text" id="b" name="b" required><br><br>
+        
+            <label for="x0">x(0):</label>
+            <input type="text" id="x0" name="x0" required><br><br>
+
+            <label for="tol">tolerancia:</label>
+            <input type="text" id="tol" name="tol" required><br><br>
+        
+            <label for="Nmax">Nmax:</label>
+            <input type="text" id="Nmax" name="Nmax" required><br><br>
+
+            <input type="hidden" name="form_type" value="form_solucionar_gss">
+        
+            <button type="submit">Ejecutar</button>
+        </form>
+    {% endif %}
+ 
+
+    </header> 
+    <main>
+
+    {% if matriz %}
+    <h3 id="t1">Resultados del método Incremental</h3>
+     
+     
+    <br>
+    <br>
+    <br>
+    <table>
+        <thead>
+            <tr>
+                <th>Iteración</th>
+                <th>a</th>
+                <th>b</th>
+                <th>f(a)</th>
+                <th>f(b)</th>
+                <th>Error Abs.</th>
+                <th>Error rel.</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in matriz %}
+                <tr>
+                    <td>{{ row.0 }}</td>
+                    <td>{{ row.1 }}</td>
+                    <td>{{ row.2 }}</td>
+                    <td>{{ row.3 }}</td>
+                    <td>{{ row.4 }}</td>
+                    <td>{{ row.5 }}</td>
+                    <td>{{ row.6 }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+     
+ 
+{% endif %}
+{% if matriz1 %}
+    <h3 id="t1">Resultados del método biseccion</h3>
+     
+     
+    <br>
+    <br>
+    <br>
+    <table>
+        <thead>
+            <tr>
+                <th>Iteración</th>
+                <th>a</th>
+                <th>f(a)</th>
+                <th>pm</th>
+                <th>f(pm)</th>
+                <th>b</th>
+                <th>f(b)</th>
+                <th>Error Abs.</th>
+                
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in matriz1 %}
+                <tr>
+                    <td>{{ row.0 }}</td>
+                    <td>{{ row.1 }}</td>
+                    <td>{{ row.2 }}</td>
+                    <td>{{ row.3 }}</td>
+                    <td>{{ row.4 }}</td>
+                    <td>{{ row.5 }}</td>
+                    <td>{{ row.6 }}</td>
+                    <td>{{ row.7 }}</td>
+                    
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+     
+ 
+{% endif %}
+{% if matriz2 %}
+    <h3 id="t1">Resultados del método regla falsa</h3>
+     
+     
+    <br>
+    <br>
+    <br>
+    <table>
+        <thead>
+            <tr>
+                <th>Iteración</th>
+                <th>a</th>
+                <th>f(a)</th>
+                <th>pm</th>
+                <th>f(pm)</th>
+                <th>b</th>
+                <th>f(b)</th>
+                <th>Error Abs.</th>
+                
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in matriz2 %}
+                <tr>
+                    <td>{{ row.0 }}</td>
+                    <td>{{ row.1 }}</td>
+                    <td>{{ row.2 }}</td>
+                    <td>{{ row.3 }}</td>
+                    <td>{{ row.4 }}</td>
+                    <td>{{ row.5 }}</td>
+                    <td>{{ row.6 }}</td>
+                    <td>{{ row.7 }}</td>
+                    
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+     
+ 
+{% endif %}
+
+
+{% if matriz3 %}
+    <h3 id="t1">Resultados del método punto fijo</h3>
+     
+     
+    <br>
+    <br>
+    <br>
+    <table>
+        <thead>
+            <tr>
+                <th>Iteración</th>
+                <th>Xn</th>
+                <th>g(xn)</th>               
+                <th>Error Abs.</th>
+                <th>Error Rel.</th>
+                
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in matriz3 %}
+                <tr>
+                    <td>{{ row.0 }}</td>
+                    <td>{{ row.1 }}</td>
+                    <td>{{ row.2 }}</td>
+                    <td>{{ row.3 }}</td>
+                    <td>{{ row.4 }}</td>
+                    
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+     
+ 
+{% endif %}
+
+
+
+{% if matriz4 %}
+    <h3 id="t1">Resultados del método newton</h3>
+     
+     
+    <br>
+    <br>
+    <br>
+    <table>
+        <thead>
+            <tr>
+                <th>Iteración</th>
+                <th>x</th>
+                <th>f(x)</th>
+                <th>df(x)</th>
+                <th>Error Abs.</th>
+                <th>Error Rel.</th>
+                
+                
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in matriz4 %}
+                <tr>
+                    <td>{{ row.0 }}</td>
+                    <td>{{ row.1 }}</td>
+                    <td>{{ row.2 }}</td>
+                    <td>{{ row.3 }}</td>
+                    <td>{{ row.4 }}</td>
+                    <td>{{ row.5 }}</td>
+                    
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+     
+ 
+{% endif %}
+{% if matriz5 %}
+    <h3 id="t1">Resultados del método raices multiples</h3>
+     
+     
+    <br>
+    <br>
+    <br>
+    <table>
+        <thead>
+            <tr>
+                <th>Iteración</th>
+                <th>x</th>
+                <th>f(x)</th>
+                <th>df(x)</th>
+                <th>d2f(x)</th>
+                <th>Error Abs.</th>
+                
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in matriz5 %}
+                <tr>
+                    <td>{{ row.0 }}</td>
+                    <td>{{ row.1 }}</td>
+                    <td>{{ row.2 }}</td>
+                    <td>{{ row.3 }}</td>
+                    <td>{{ row.4 }}</td>
+                    <td>{{ row.5 }}</td>
+                    
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+     
+ 
+{% endif %}
+{% if matriz6 %}
+    <h3 id="t1">Resultados del método secante</h3>
+     
+     
+    <br>
+    <br>
+    <br>
+    <table>
+        <thead>
+            <tr>
+                <th>Iteración</th>
+                <th>x0</th>
+                <th>f(x0)</th>
+                <th>Error Abs.</th>Rel
+                
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in matriz6 %}
+                <tr>
+                    <td>{{ row.0 }}</td>
+                    <td>{{ row.1 }}</td>
+                    <td>{{ row.2 }}</td>
+                    <td>{{ row.3 }}</td>
+                    <td>{{ row.4 }}</td>
+                                        
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+     
+ 
+{% endif %}
+
+{% if x %}
+    {% if x|length > 0 %}
+        <h3 id="t1">Resultados del método Gauss sencillo</h3>
+        <p>Resultado x:</p>
+        <table>
+            {% for row in x %}
+                <tr>
+                    <td>{{ row }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+{% endif %}
+
+{% if x1 %}
+    {% if x1|length > 0 %}
+        <h3 id="t1">Resultados del método Gauss con pivoteo</h3>
+        <p>Resultado x:</p>
+        <table>
+            {% for row in x1 %}
+                <tr>
+                    <td>{{ row }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+{% endif %}
+{% if xd %}
+        <h3 id="t1">Resultados del método Doolittle</h3>
+
+        <p>Matriz L:</p>
+        <table>
+            
+            {% for row in L %}
+                <tr>
+                    {% for value in row %}
+                        <td>{{ value }}</td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </table>
+        
+        <p>Matriz U:</p>
+        <table>
+            {% for row in U %}
+                <tr>
+                    {% for value in row %}
+                        <td>{{ value }}</td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </table>
+        
+        <p>Resultado x:</p>
+        <table>
+            {% for value in xd %}
+                <tr>
+                    <td>{{ value }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+
+        
+    
+{% endif %}
+{% if x4 %}
+        <h3 id="t1">Resultados del método Crout</h3>
+
+        <p>Matriz L:</p>
+        <table>
+            
+            {% for row in L2 %}
+                <tr>
+                    {% for value in row %}
+                        <td>{{ value }}</td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </table>
+        
+        <p>Matriz U:</p>
+        <table>
+            {% for row in U2 %}
+                <tr>
+                    {% for value in row %}
+                        <td>{{ value }}</td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </table>
+        
+        <p>Resultado x:</p>
+        <table>
+            {% for value in x4 %}
+                <tr>
+                    <td>{{ value }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+
+        
+    
+{% endif %}
+{% if x5 %}
+        <h3 id="t1">Resultados del método Cholesky</h3>
+
+        <p>Matriz L:</p>
+        <table>
+            
+            {% for row in L3 %}
+                <tr>
+                    {% for value in row %}
+                        <td>{{ value }}</td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </table>
+        
+        <p>Matriz U:</p>
+        <table>
+            {% for row in U3 %}
+                <tr>
+                    {% for value in row %}
+                        <td>{{ value }}</td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </table>
+        
+        <p>Resultado x:</p>
+        <table>
+            {% for value in x5 %}
+                <tr>
+                    <td>{{ value }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+
+        
+    
+{% endif %}
+
+
+{% if x2 %}
+        <h3 id="t1">Resultados del método Gaussiano por LU</h3>
+
+        <p>Matriz L:</p>
+        <table>
+            
+            {% for row in L1 %}
+                <tr>
+                    {% for value in row %}
+                        <td>{{ value }}</td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </table>
+        
+        <p>Matriz U:</p>
+        <table>
+            {% for row in U1 %}
+                <tr>
+                    {% for value in row %}
+                        <td>{{ value }}</td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </table>
+        
+        <p>Resultado x:</p>
+        <table>
+            {% for value in x2 %}
+                <tr>
+                    <td>{{ value }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+
+        
+    
+{% endif %}
+
+
+{% if matriz8 %}
+    <h3 id="t1">Resultados del método Jacobi</h3>
+     
+     
+    <br>
+    <br>
+    <br>
+    <table>
+        <thead>
+            <tr>
+                <th>Iteración</th>
+                <th>Xn</th>        
+                <th>Error Abs.</th>
+                <th>Error Rel.</th>
+                
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in matriz8 %}
+                <tr>
+                    <td>{{ row.0 }}</td>
+                    <td>{{ row.1 }}</td>
+                    <td>{{ row.2 }}</td>
+                    <td>{{ row.3 }}</td>
+                    
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+     
+ 
+{% endif %}
+
+{% if matriz7 %}
+    <h3 id="t1">Resultados del método Gauss-Seidel</h3>
+     
+     
+    <br>
+    <br>
+    <br>
+    <table>
+        <thead>
+            <tr>
+                <th>Iteración</th>
+                <th>Xn</th>        
+                <th>Error Abs.</th>
+                <th>Error Rel.</th>
+                
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in matriz7 %}
+                <tr>
+                    <td>{{ row.0 }}</td>
+                    <td>{{ row.1 }}</td>
+                    <td>{{ row.2 }}</td>
+                    <td>{{ row.3 }}</td>
+                    
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+     
+ 
+{% endif %}
+
+
+
+
+{% if metodo_seleccionado == "efecto" %}
+    <h3 id="t1">Manual de usuario </h3>
+    <br>
+    <br>
+    <br>
+    <p  id="t2">Para ejecutar ese programa sin tener ningún tipo de problema es necesario que tenga en cuenta las siguientes indicaciones</p>
+    <br>
+    <br>
+    <p  id="t2">1. Debe seleccionar en la parte izquierda superior el método que desea usar posterior a esto debe presionar el botón seleccionar para confirmar</p>
+    <br>
+    <p  id="t2">2. luego de esto se desplegarán en la parte izquierda baja todos los espacios que usted debe rellenar para obtener una respuesta satisfactoria. (No pueden quedar espacios en blanco) </p>
+    <br>
+    <p  id="t2">3. Posterior a haber rellenado todos estos espacios deberá presionar el botón ejecutar y en la ventana de color blanco aparecerá la respuesta</p>
+
+{% endif %}
+
+{% if metodo_seleccionado == "incrementales" %}
+    <h3 id="t1">Manual de usuario </h3>
+    <br>
+    <br>
+    <br>
+    <p  id="t2">Para ejecutar este metodo sin tener ningún tipo de problema es necesario que tenga en cuenta las siguientes indicaciones</p>
+    <br>
+    <br>
+    <p  id="t2">1. deberá escribir en f(x) una función con variables x; en x inicial tendrá que escribir un número entero o decimal; en delta tendrá que escribir un número entero o decimal y en el número máximo de iteraciones tendrá que escribir un entero</p>
+    <br>
+    <p  id="t2">2. para las ecuaciones es importante resaltar que debe escribir los numeros que sean multiplicados por x con un * de por medio (4*x). para usar el exponente debera escribir doble asterisco (e**x). recuerde usar muy bien los parentesis para separar las operaciones y finalmente para los logaritmos naturales tendra que escribir la funcion log(x)    </p>
+    <br>
+    
+
+{% endif %}
+{% if metodo_seleccionado == "regla_falsa" or metodo_seleccionado == "biseccion" %}
+    <h3 id="t1">Manual de usuario </h3>
+    <br>
+    <br>
+    <br>
+    <p  id="t2">Para ejecutar este metodo sin tener ningún tipo de problema es necesario que tenga en cuenta las siguientes indicaciones</p>
+    <br>
+    <br>
+    <p  id="t2">1. </p>
+    <br>
+    <p  id="t2">2. </p>
+    <br>
+    <p  id="t2">3. </p>
+
+{% endif %}
+
+
+
+    </main>
+         
+    </body>
+</html> 
