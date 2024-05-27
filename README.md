@@ -1,37 +1,26 @@
-# Quicker Ticket Assistant (QTA)
-## Description
-QTA is a help desk management system designed for companies working with medical devices. The application's goal is to establish order in the flow of calls received by companies. Additionally, it aims to automate the way companies handle their tickets.
+# proyecto final analisis numerico
+ 
 
 ## Usage Instructions
-To run the project, make sure you have the following installed:
+para utilizarlo asegurese de tener instalado lo siguiente: 
 
 * **Python**
 * **Django**
 
-Follow these steps:
+siga los siguientes pasos:
 
-### 1. Clone the project from GitHub:
+### 1. clone el proyecto desde github:
 ```bash
-git clone https://github.com/jmmunozg1/QTAProject.git
+git clone https://github.com/Henao13/QTAProject.git
 ```
-### 2. Navigate to the project directory:
+### 2. navegue hasta el directorio donde guardo el proyecto: 
 ```bash
 cd QTAProject
 ```
-### 3. Start the server:
+### 3. inicie el servidor:
 ```bash
 python manage.py runserver
 ```
-### 4. Open your browser and go to http://localhost:8000 to access the application.
+### 4. abra su navegador y dirigase a http://localhost:8000 para acceder a la aplicacion.
 
-
-## How to Contribute
-If you would like to contribute to this project, follow these steps:
-
-1. Fork the repository.
-2. Create a new branch for your contribution.
-3. Make the changes and be sure to follow the project's style guidelines.
-4. Submit a pull request.
-
-## Contact
-For any inquiries or suggestions, please contact us at camazog1@eafit.edu.co, jdzapatam@eafit.edu.co,  jmmunozg1@eafit.edu.co or open an issue on GitHub.
+ 
