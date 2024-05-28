@@ -22,7 +22,7 @@ def conversion(expr):
 
 
 
-def secante(f, x0, x1, tol, Nmax):
+def secante(f, x0, x1, tol, Nmax,error12):
     
     f =conversion(f) 
     
@@ -38,9 +38,24 @@ def secante(f, x0, x1, tol, Nmax):
     E="-"
     err="-"
     matriz.append([cont, x0, f0, E, err])
-    E = abs(x1 - x0)
+     
+    Eabs=abs(x1-x0) 
+    
+    if error12=="rela":
+        if x0 != 0:
+            E=Eabs/x0
+            err=Eabs/x1
+            print("esa fue")
+        else:
+            print("Error: division by zero")
+            E= float('inf')
+            err=float('inf')
+        
+    else:
+        E=Eabs
+        
     cont=1
-    matriz.append([cont, x1, f1, E])
+    matriz.append([cont, x1, f1, Eabs, err])
      
     while E > tol and cont < Nmax:
         cont = cont + 1
@@ -53,16 +68,31 @@ def secante(f, x0, x1, tol, Nmax):
 
         xact = x1 - f1 * (x1 - x0) / denom
         fact = evaluate_expression(xact)
-        E = abs(xact - x1)
+        
+        Eabs = abs(xact - x1)
+         
+    
+        if error12=="rela":
+            if xact != 0:
+                E=Eabs/xact
+                err=Eabs/xact
+                print("esa fue")
+            else:
+                print("Error: division by zero")
+                E= float('inf')
+                err=float('inf')
+        
+        else:
+            E=Eabs
 
 
         if xact != 0:
-            err = E / xact
+            err = Eabs / xact
         else:
             print("Error: division por 0")
             err = float('inf')
 
-        matriz.append([cont-1, xact, fact, E, err]) 
+        matriz.append([cont-1, xact, fact, Eabs, err]) 
         x0 = x1
         f0 = f1
         x1 = xact
@@ -74,7 +104,7 @@ def secante(f, x0, x1, tol, Nmax):
 
 f="e**-x - x"
 
-matriz = secante(f, 0, 1, 10**-20, 100)
+
 
  
 

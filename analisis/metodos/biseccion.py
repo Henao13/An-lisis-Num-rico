@@ -11,6 +11,8 @@ def C2_biseccion(f, a,b, tol,Nmax ):
     E=1000 
     cont=0
     matriz = []
+    
+    matriz.append([cont, a, fa, pm, fpm, b, fb, E ])
 
     while E>tol and cont<Nmax:
         if fb*fpm<0:
@@ -22,7 +24,9 @@ def C2_biseccion(f, a,b, tol,Nmax ):
         pm=(a+b)/2 
         fpm=f(pm) 
         E=abs(pm-p0) 
-        cont=cont+1 
+        cont=cont+1
+        fa=f(a)
+        fb=f(b) 
 
          
          

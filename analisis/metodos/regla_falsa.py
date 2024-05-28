@@ -14,6 +14,7 @@ def C3_reglaFalsa(f, a,b, tol,Nmax ):
     E=1000 
     cont=0
     matriz = []
+    
 
     while E>tol and cont<Nmax:
         if fb*fpm<0:

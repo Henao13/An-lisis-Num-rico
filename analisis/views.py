@@ -56,10 +56,13 @@ def analisis(request):
         if form_type == 'form_solucionar_pf' and 'g' in request.POST and 'x0' in request.POST and 'tol' in request.POST and 'Nmax' in request.POST:
             
             g= request.POST.get('g')
+            error=request.POST.get('error')
+             
             x0 = float(request.POST.get('x0'))
             tol = float(request.POST.get('tol'))
             Nmax = int(request.POST.get('Nmax'))
-            x, g,iter, matriz3 = puntofijo.punto_f(g, x0, tol, Nmax)
+             
+            x, g,iter, matriz3 = puntofijo.punto_f(g, x0, tol, Nmax,error)
             return render(request, 'analisis.html', {'metodo_seleccionado': metodo_seleccionado, 'matriz3': matriz3, 'x': x, "iter":iter, 'g': g})
         
         if form_type == 'form_solucionar_rm' and 'f' in request.POST and 'df' in request.POST and 'd2f' in request.POST and 'x0' in request.POST and 'tol' in request.POST and 'Nmax' in request.POST:
@@ -69,8 +72,9 @@ def analisis(request):
             x0 = float(request.POST.get('x0'))
             tol = float(request.POST.get('tol'))
             Nmax = int(request.POST.get('Nmax'))
+            error=request.POST.get('error')
             print("hola")
-            matriz5= raices_m.C5_raices_mult(f, df, d2f, x0, tol, Nmax)
+            matriz5= raices_m.C5_raices_mult(f, df, d2f, x0, tol, Nmax,error)
              
             return render(request, 'analisis.html', {'metodo_seleccionado': metodo_seleccionado, 'matriz5': matriz5})
 
@@ -80,8 +84,8 @@ def analisis(request):
             x0 = float(request.POST.get('x0'))
             tol = float(request.POST.get('tol'))
             Nmax = int(request.POST.get('Nmax'))
-             
-            matriz4 = newton.C5_newton(f,df, x0, tol, Nmax)
+            error=request.POST.get('error') 
+            matriz4 = newton.C5_newton(f,df, x0, tol, Nmax,error)
             return render(request, 'analisis.html', {'metodo_seleccionado': metodo_seleccionado, 'matriz4': matriz4})
         
         if form_type == 'form_solucionar_sec' and 'f' in request.POST and 'x0' in request.POST and 'x1' in request.POST and 'tol' in request.POST and 'Nmax' in request.POST:
@@ -90,7 +94,8 @@ def analisis(request):
             x1 = float(request.POST.get('x1'))
             tol = float(request.POST.get('tol'))
             Nmax = int(request.POST.get('Nmax'))
-            matriz6 = secante.secante(f, x0, x1, tol, Nmax)
+            error=request.POST.get('error')
+            matriz6 = secante.secante(f, x0, x1, tol, Nmax,error)
             return render(request, 'analisis.html', {'metodo_seleccionado': metodo_seleccionado, 'matriz6': matriz6})
 
         if form_type == 'form_solucionar_gas' and 'A' in request.POST and 'b' in request.POST:
@@ -151,7 +156,8 @@ def analisis(request):
             x0= request.POST.get('x0')
             tol = float(request.POST.get('tol'))
             Nmax = int(request.POST.get('Nmax'))
-            matriz8 = jacobi.jacobi(A, b,x0,tol,Nmax)
+            error=request.POST.get('error')
+            matriz8 = jacobi.jacobi(A, b,x0,tol,Nmax,error)
             return render(request, 'analisis.html', {'metodo_seleccionado': metodo_seleccionado, 'matriz8': matriz8})
             
             
@@ -161,7 +167,8 @@ def analisis(request):
             x0=request.POST.get('x0')
             tol = float(request.POST.get('tol'))
             Nmax = int(request.POST.get('Nmax'))
-            matriz7 = gauss_seidel.gauss_seidel(A, b ,x0 ,tol,Nmax)
+            error=request.POST.get('error')
+            matriz7 = gauss_seidel.gauss_seidel(A, b ,x0 ,tol,Nmax,error)
             return render(request, 'analisis.html', {'metodo_seleccionado': metodo_seleccionado, 'matriz7': matriz7})
             
 

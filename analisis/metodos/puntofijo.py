@@ -28,7 +28,7 @@ def conversion(expr):
 
 
 
-def punto_f(g,x0,tol,Nmax):
+def punto_f(g,x0,tol,Nmax,error):
   
     g =conversion(g) 
     
@@ -42,30 +42,49 @@ def punto_f(g,x0,tol,Nmax):
     gxant=evaluate_expression(xant)
     print(gxant, "gxant",xant,)
     print(gxant)
-    E=abs(gxant-xant)
+     
+    Eabs=abs(gxant-xant) 
+    
+    if error=="rela":
+        if gxant != 0:
+            E=Eabs/gxant
+            err=Eabs/gxant
+            print("esa fue")
+        else:
+            print("Error: division by zero")
+            E= float('inf')
+            err=float('inf')
+        
+    else:
+        E=Eabs
+         
     
 
-    if gxant != 0:
-        err=E/gxant
-    else:
-        print("Error: division by zero")
-        err = float('inf')
+     
     
     while E>tol and cont<Nmax:
         
+            
          
         xact=evaluate_expression(float(xant))
-        E=abs(xact-xant)
+        Eabs=abs(xact-xant)
+        if error=="abs":
+            E=abs(xact-xant)
         
         # Verificar si xact es cero
         if xact != 0:
-            err=E/xact
+            err=Eabs/xact
+            if error=="rela":
+                E=Eabs/xact
         else:
             print("Error: division by zero")
             err = float('inf')
+            if error=="rela":
+                E = float('inf')
+            
         
         gxant=evaluate_expression(xant)   
-        matriz.append([cont,xant,gxant,E, err])
+        matriz.append([cont,xant,gxant,Eabs, err])
         cont+=1
         xant=xact
         

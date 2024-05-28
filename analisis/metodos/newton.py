@@ -14,7 +14,7 @@ def conversion(expr):
     converted_expr = converted_expr.replace('log(', 'math.log(')
     return converted_expr
 
-def C5_newton(f,df, x0, tol,Nmax ):
+def C5_newton(f,df, x0, tol,Nmax,error12):
     f =conversion(f) 
     df =conversion(df) 
     
@@ -35,19 +35,42 @@ def C5_newton(f,df, x0, tol,Nmax ):
         return matriz
 
     xact=xant-fant/dfx 
-    E=abs(xact-xant)
-    err=E/xact
+    Eabs=abs(xact-xant)
+ 
+    if error12=="rela":
+        if xact != 0:
+            E=Eabs/xact
+            err=Eabs/xact
+            print("esa fue")
+        else:
+            print("Error: division by zero")
+            E= float('inf')
+            err=float('inf')
+    else:
+        E=Eabs
 
     while E>tol and cont<Nmax:
         if dfx == 0:
             print("Error: division por cero")
             break
-
+            
         xact=xant-fant/dfx 
         fact=evaluate_expression(xact)
-        E=abs(xact-xant) 
-        err=E/xact
-        matriz.append([cont, xant,fant,dfx,  E, err ])
+        Eabs=abs(xact-xant) 
+        err=Eabs/xact    
+        if error12=="rela":
+            if xact != 0:
+                E=Eabs/xact
+                err=Eabs/xact
+                print("esa fue")
+            else:
+                print("Error: division by zero")
+                E= float('inf')
+                err=float('inf')
+            
+        else:
+            E=Eabs
+        matriz.append([cont, xant,fant,dfx,  Eabs, err ])
         cont=cont+1 
         xant=xact 
         fant=fact 

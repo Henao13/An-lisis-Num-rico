@@ -24,7 +24,7 @@ def str_to_numpy_matrix(matrix_str):
         return None
 
 
-def gauss_seidel(A, b, x0, tol, max_iter):
+def gauss_seidel(A, b, x0, tol, max_iter,error12):
     A = str_to_numpy_matrix(A)   
     b = str_to_numpy_matrix(b)
     x0 = str_to_numpy_matrix(x0)
@@ -32,15 +32,20 @@ def gauss_seidel(A, b, x0, tol, max_iter):
     D = np.diag(np.diag(A))
     LU = A - D
     x = x0
+    
     for i in range(max_iter):
         x_aux = x.copy()
         for j in range(A.shape[0]):
             x[j] = (b[j] - np.dot(LU[j, :], x)) / D[j, j]
         x = np.round(x, decimals=5)
-        error = np.linalg.norm(x - x_aux)
-        relative_error = error / np.linalg.norm(x)
-        
-        matriz.append([i, x, error, relative_error])
+        errorabs = np.linalg.norm(x - x_aux)
+        relative_error = errorabs / np.linalg.norm(x)
+        if error12=="rela":
+            error=relative_error
+        else:
+            error=errorabs  
+         
+        matriz.append([i, x, errorabs, relative_error])
         if error < tol:
             break
     return matriz

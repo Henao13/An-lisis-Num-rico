@@ -18,7 +18,7 @@ def str_to_numpy_matrix(matrix_str):
         return None
     
 
-def jacobi(A, b, x0, tol, max_iter):
+def jacobi(A, b, x0, tol, max_iter,error12):
     A = str_to_numpy_matrix(A)
     b = str_to_numpy_matrix(b)
     x0 = str_to_numpy_matrix(x0)
@@ -32,17 +32,21 @@ def jacobi(A, b, x0, tol, max_iter):
         D_inv = np.linalg.inv(D)
         x_aux = x
         x = np.dot(D_inv, np.dot(-LU, x)) + np.dot(D_inv, b)
-        error = np.linalg.norm(x - x_aux)
+        errorabs = np.linalg.norm(x - x_aux)
         
         # Verificar si la norma de x es cero
         if np.linalg.norm(x) != 0:
-            relative_error = error / np.linalg.norm(x)
+            relative_error = errorabs / np.linalg.norm(x)
         else:
             print("Error: division by zero")
             relative_error = float('inf')
         
-        matriz.append([i, x.copy(), error, relative_error]) 
-        
+        matriz.append([i, x.copy(), errorabs, relative_error]) 
+        if error12=="rela":
+            error=relative_error
+        else:
+            error=errorabs
+            
         if error < tol:
             break
     return matriz

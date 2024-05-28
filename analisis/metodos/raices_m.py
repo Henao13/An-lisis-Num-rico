@@ -21,7 +21,7 @@ def conversion(expr):
 
     return converted_expr
 
-def C5_raices_mult(f, df, d2f, x0, tol, Nmax):
+def C5_raices_mult(f, df, d2f, x0, tol, Nmax,error12):
     
     f = conversion(f)
     df = conversion(df)
@@ -38,7 +38,8 @@ def C5_raices_mult(f, df, d2f, x0, tol, Nmax):
     fant = evaluate_expression(xant)
     cont = 0
     matriz = []
-    E="-"
+   
+     
 
     while True:
 
@@ -51,20 +52,32 @@ def C5_raices_mult(f, df, d2f, x0, tol, Nmax):
             break
         
         xact = xant - fant * dfx / denom
-        
-        print(xact, xant,fant,dfx,d2fx)
+        Eabs=abs(xact-xant)
+        err=Eabs/xact
+         
         fact = evaluate_expression(xact)
          
-        matriz.append([cont, xant, fant, dfx, d2fx, E])
          
-        E = abs(xact - xant)
+        
+        if error12=="rela":
+            if xant != 0:
+                E=Eabs/xact
+                 
+           
+            else:
+                print("Error: division by zero")
+                E= float('inf')
+                err=float('inf')
+        
+        else:
+            E=Eabs
          
-
+        matriz.append([cont, xant, fant, dfx, d2fx, Eabs, err])
         xant = xact
         fant = fact
         cont += 1
         if E < tol or cont >= Nmax:
-            matriz.append([cont, xant, fant, dfx, d2fx, E])
+             
             break
 
     return matriz
@@ -83,7 +96,7 @@ d2f="e**(x-2)+ 1/((x-1)**2)-2"
 
  
 # Ejecutar el método
-matriz = C5_raices_mult(f, df, d2f, 1.6, 0.001, 10)
+
 #print(matriz)
 
 #print(tabulate(matriz, headers=["Iteración", "x", "f(x)", "df(x)", "d2f(x)", "Error Abs."], tablefmt="fancy_grid"))
